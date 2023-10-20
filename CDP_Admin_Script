@@ -1,0 +1,151 @@
+*********************************************
+              CDP Admin tasks
+*********************************************
+> Create The Instance same as created in CDP Cloudera and the root of hadoop is "hdfs"
+1.Name one of the instance of t2.large or t3.large as Worker
+2.Connect to that instance by coping the public ip v4 of that instance
+$ 1.ssh -i nick.pem ubuntu@public_ip
+$ 2.hdfs dfs -mkdir /data
+$ 3.sudo su
+$ 4.cd
+$ 5.hdfs dfs -mkdir /data
+$ 6.exit
+$ 7.su hdfs
+$ 8.set the password ==> sudo passwd hdfs
+$ 9.su hdfs
+$ 10.sudo nano /etc/passwd
+> for searching hdfs press ctrl + W ===> remove  /usr/sbin/nologin ====> and enter /bin/bash then save cltr + o enter cltr + x
+$ to hdfs sudo ===>$ 11.sudo adduser hdfs sudo 
+$ 12.su hdfs
+$ 13.cd
+$ 14.hdfs dfs -mkdir /data
+> important===> home directory of hdfs user ===> /var/lib/hadoop-hdfs
+$ 15.hdfs and enter 
+$ 16.hdfs dfs
+$ 17.hdfs dfs admin ===> admin command for file system
+$ 18. for yarn
+$ 19.hdfs dfs -ls /
+
+
+
+# Safemode ====> what is safe mode is the read only mode or maintaince mode (hdfs)
+ any time of maintance like update/upgrade/patch/configuration
+
+$ 1.hdfs dfsadmin -safemode get
+$ 2.hdfs dfsadmin -safemode enter
+$ 3.nano abc add any data in it
+$ 4.ls
+$ 5.hdfs dfs -put abc /data 
+$ 6.hdfs dfsadmin -safemode leave ===> exit from safe mode
+$ 7.hdfs dfsadmin -safemode get ====> To check if safe mode is off or not
+
+-----***** Creating snapshots ****----
+ 
+$ 1.hdfs dfsadmin -allowSnapshot /data
+
+hdfs dfs -createSnapshot /data snap1
+
+hdfs lsSnapshottableDir
+
+hdfs dfs -ls /data/.snapshot
+
+hdfs dfs -deleteSnapshot /data snap1
+
+hdfs dfsadmin -disallowSnapshot /data
+
+--> check snapshots on NN web UI
+
+
+-----**** Change ownerships ****-----
+
+hdfs dfs -chgrp group1 /data/abc
+
+hdfs dfs -chown testuser /data/abc
+
+hdfs dfs -chmod 700 /data/abc
+
+hdfs dfs -ls -R
+
+
+-----**** Configuring the HDFS quota ****-----
+
+wget https://raw.githubusercontent.com/tbertinmahieux/MSongsDB/master/Tasks_Demos/CoverSongs/shs_dataset_test.txt
+
+hdfs dfs -put shs_dataset_test.txt /data
+
+hdfs dfsadmin -setQuota 20 /data
+
+hdfs dfsadmin -setSpaceQuota ___ /data
+
+hdfs dfsadmin -clrQuota /data
+
+hdfs dfsadmin -clrSpaceQuota /data
+
+hdfs dfs -count -q /path/to/directory
+quota  rem_quota  space_quota  rem_space_quota  dir_count  file_count  size  file
+ none     inf        54975	    56897           3           8     786955 /u/ 
+
+
+-----*** Namenode metadata backup ****-----
+
+hdfs fsck /
+
+hdfs dfsadmin -report
+
+hdfs dfsadmin -report > report.txt
+
+hdfs dfsadmin -safemode enter
+
+hdfs dfsadmin -saveNamespace
+
+cd /dfs/nn
+
+cp -r current/ /var/lib/hadoop-hdfs/nnbackup
+
+
+----->>>> Leave safemode
+hdfs dfsadmin -safemode leave
+
+
+-----**** Filesystem check ****----
+
+hdfs fsck <path>
+hdfs fsck /
+
+## Options for fsck. To be given after path
+-delete					Delete corrupted files.
+-files					Print out files being checked.
+-files -blocks				Print out the block report
+-files -blocks -locations		Print out locations for every block.
+-includeSnapshots			Include snapshot data if the given path indicates a snapshottable directory or there are snapshottable 						directories under it.
+-list-corruptfileblocks			Print out list of missing blocks and files they belong to.
+-move					Move corrupted files to /lost+found.
+
+
+----**** Setting Replication for a dataset ----*****
+
+hdfs dfs -setrep -w 4 <file-name>
+
+
+-----**** Yarn Administration ****----
+
+## Submit inbuild hadoop jobs (Open 4 terminals and submit same job at a time)
+
+
+yarn jar /opt/cloudera/parcels/CDH/lib/hadoop-mapreduce/hadoop-mapreduce-examples.jar pi 20 500
+
+yarn application -list
+
+yarn application -list -appStates ALL
+
+##To get application ID use 
+
+yarn application -list
+
+yarn application -status application_1459542433815_0002
+
+## Kill an application
+
+yarn application -kill application_1459542433815_0002
+
+yarn logs -applicationId application_1459542433815_0002
