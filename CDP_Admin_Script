@@ -49,10 +49,10 @@ $ 3.hdfs lsSnapshottableDir
 
 $ 4.hdfs dfs -ls /data/.snapshot ===> this command will give the list of dir on which snapshot given
 
-$ 5.hdfs dfs -deleteSnapshot /data snap1 
 
 > Go in cloudera click on hdfs service click on upper list Namenode web ui ===> which last number of ip then go in terminal and check private ip of all instance the 
 on which match copy the private ip and past in search bar and then 9870 go in snapshot check the information 
+$ 5.hdfs dfs -deleteSnapshot /data snap1 
 
 $ 6.hdfs dfsadmin -disallowSnapshot /data
 
@@ -126,7 +126,7 @@ $ 8.hdfs dfsadmin -setSpaceQuota 2 or ___ /data
 
 $ 9.nano xyz ==> put any data
 
-$ 10.hdfs dfs -put xyz /data
+  $ 10.hdfs dfs -put xyz /data
 
 $ 11.hdfs dfsadmin -clrQuota /data
 
