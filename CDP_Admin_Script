@@ -41,64 +41,174 @@ $ 7.hdfs dfsadmin -safemode get ====> To check if safe mode is off or not
 
 -----***** Creating snapshots ****----
  
-$ 1.hdfs dfsadmin -allowSnapshot /data
+$ 1.hdfs dfsadmin -allowSnapshot /data ===> if you want to create snapshot first allow the snapshot using command
 
-hdfs dfs -createSnapshot /data snap1
+$ 2.hdfs dfs -createSnapshot /data snap1
 
-hdfs lsSnapshottableDir
+$ 3.hdfs lsSnapshottableDir
 
-hdfs dfs -ls /data/.snapshot
+$ 4.hdfs dfs -ls /data/.snapshot ===> this command will give the list of dir on which snapshot given
 
-hdfs dfs -deleteSnapshot /data snap1
+$ 5.hdfs dfs -deleteSnapshot /data snap1 
 
-hdfs dfsadmin -disallowSnapshot /data
+> Go in cloudera click on hdfs service click on upper list Namenode web ui ===> which last number of ip then go in terminal and check private ip of all instance the 
+on which match copy the private ip and past in search bar and then 9870 go in snapshot check the information 
+
+$ 6.hdfs dfsadmin -disallowSnapshot /data
+
+$ 7.hdfs lsSnapshottableDir
+
+$ 8.exit
+
+$ 9.hdfs dfs -mkdir /abc
+
+$ 10.su hdfs 
+
+$ 11.cd
+
+$ 12.useradd testuser 
 
 --> check snapshots on NN web UI
 
 
 -----**** Change ownerships ****-----
+$ 1.sudo addgroup grp1
 
-hdfs dfs -chgrp group1 /data/abc
+$ 2.hdfs dfs -mkdir /abc
 
-hdfs dfs -chown testuser /data/abc
+$ 3.hdfs dfs -ls /
 
-hdfs dfs -chmod 700 /data/abc
 
-hdfs dfs -ls -R
+$ 4.hdfs dfs -chown testuser /data/abc  ===> sir used this hdfs dfs -chown testuser /abc
+
+$ 5.hdfs dfs -ls /
+
+$ 6.hdfs dfs -chgrp group1 /data/abc ===> sir used this ==> hdfs dfs -chgrp grp1 /abc
+
+$ 7.hdfs dfs -ls /
+
+$ 8.hdfs dfs -chown test
+
+$ 9.hdfs dfs -chown testuser:grp1  /data
+
+$ 10.hdfs dfs -ls /
+
+$ 11.hdfs dfs -chmod 700 /data/abc  sir used this ===> hdfs dfs g+w /abc
+
+$ 12.hdfs dfs -ls /
+
+$ 13.hdfs dfs -chmod 740 /abc
+
+$ 14.hdfs dfs -ls /
+
+$ 15.hdfs dfs -ls -R
 
 
 -----**** Configuring the HDFS quota ****-----
 
-wget https://raw.githubusercontent.com/tbertinmahieux/MSongsDB/master/Tasks_Demos/CoverSongs/shs_dataset_test.txt
+$ 1.wget https://raw.githubusercontent.com/tbertinmahieux/MSongsDB/master/Tasks_Demos/CoverSongs/shs_dataset_test.txt
 
-hdfs dfs -put shs_dataset_test.txt /data
+$ 2.ls -l
 
-hdfs dfsadmin -setQuota 20 /data
+$ 3.hdfs dfs -ls /
 
-hdfs dfsadmin -setSpaceQuota ___ /data
+$ 4.hdfs dfs -put abc /data
 
-hdfs dfsadmin -clrQuota /data
+$ 5.hdfs dfs -put shs_dataset_test.txt /data
 
-hdfs dfsadmin -clrSpaceQuota /data
+$ 6.hdfs dfs -ls /data
 
-hdfs dfs -count -q /path/to/directory
+$ cd
+
+$ 7.hdfs dfsadmin -setQuota 20 /data
+
+$ 8.hdfs dfsadmin -setSpaceQuota 2 or ___ /data
+
+$ 9.nano xyz ==> put any data
+
+$ 10.hdfs dfs -put xyz /data
+
+$ 11.hdfs dfsadmin -clrQuota /data
+
+$ 12.hdfs dfs -sl /data
+
+$ 13.hdfs dfsadmin -setSpace Quota then size in bites or watch video ===> for checking error
+
+$ 14. hdfs dfs -put xyz /data
+
+
+$ 16.hdfs dfs -count -q /path/to/directory ===> sir used this command ==> hdfs dfs -count -q /data
+
+$ 17.hdfs dfs -count -q -h /data
+$ 15.hdfs dfsadmin -clrSpaceQuota /data
+
 quota  rem_quota  space_quota  rem_space_quota  dir_count  file_count  size  file
  none     inf        54975	    56897           3           8     786955 /u/ 
 
+$ 18.hdfs   
+
+
+> To stop the cloudera cluster
+1.stop cluster CM UI
+2.stop CM from CLI
+3. from terminal using this command ===> $ sudo service cloudera-scm-server stop 
+4. stop EC2 isntance from aws console
+
+
+> GO in cloudera hdfs in upper line go in instances Find NameNode private ip and check it from the instance of aws console and copy the public_ip and connect in
+another terminal 
+
+  1.ssh -i nick.pem ubuntu@public_ip
+  2.cd /dfs/nn
+  3.sudo su
+  4.cd
+  5.cd /dfs/nn
+  6. ls  
+  7.cd /current
+  8.nano VERSION
+  9.cd ..
+ 10.ls
+ 11.cd current/
+ 12.ls
+ 13.cd
+ 14.mkdir nnbackup
+ 15.ls
+ 16.pwd
+ 17.cd /dfs/nn/
+ 18.cp -r current /root/nnbackup
+ 19. cd
+ 20.ls
+ 21.cd nnbackup/
+ 22.ls
+ 23.cd current/
+ 24.ls
+ 25.cd
+
+ > Come in previous terminal 
+1.cd
 
 -----*** Namenode metadata backup ****-----
 
-hdfs fsck /
+1.hdfs fsck / ==> TO check the file system health
+ 
+2.hdfs dfsadmin -report ==> To check the report
 
-hdfs dfsadmin -report
+3.hdfs dfsadmin -report > report.txt ==> To save the report to a file 
 
-hdfs dfsadmin -report > report.txt
+4.ls
 
-hdfs dfsadmin -safemode enter
+5.nano report.txt
 
-hdfs dfsadmin -saveNamespace
+4.hdfs dfsadmin -safemode enter  ===> why are we entering safe mode ==> safe mode should insure that there is consistant backup
 
-cd /dfs/nn
+5.hdfs dfsadmin -saveNamespace ===> this command will do manuall check pointing
+
+6.hdfs dfsadmin -safemode leave
+
+7.hdfs fsck /
+ 
+8.cd /dfs/nn
+
 
 cp -r current/ /var/lib/hadoop-hdfs/nnbackup
 
