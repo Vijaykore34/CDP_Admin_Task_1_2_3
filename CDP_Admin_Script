@@ -234,7 +234,7 @@ hdfs fsck /
 
 ----**** Setting Replication for a dataset ----*****
 
-hdfs dfs -setrep -w 4 <file-name>
+$ 1.hdfs dfs -setrep -w 4 <file-name>
 
 
 -----**** Yarn Administration ****----
@@ -242,11 +242,13 @@ hdfs dfs -setrep -w 4 <file-name>
 ## Submit inbuild hadoop jobs (Open 4 terminals and submit same job at a time)
 
 
-yarn jar /opt/cloudera/parcels/CDH/lib/hadoop-mapreduce/hadoop-mapreduce-examples.jar pi 20 500
+$ 1.yarn jar /opt/cloudera/parcels/CDH/lib/hadoop-mapreduce/hadoop-mapreduce-examples.jar pi 20 500
 
-yarn application -list
+$ 2.yarn application -list
 
-yarn application -list -appStates ALL
+$ 3.yarn application -status application app id  
+
+$ 3.yarn application -list -appStates ALL
 
 ##To get application ID use 
 
@@ -256,6 +258,6 @@ yarn application -status application_1459542433815_0002
 
 ## Kill an application
 
-yarn application -kill application_1459542433815_0002
+$ 1.yarn application -kill application_1459542433815_0002
 
-yarn logs -applicationId application_1459542433815_0002
+$ 2.yarn logs -applicationId application_1459542433815_0002
